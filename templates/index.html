@@ -93,22 +93,64 @@
         showToast(message);
     }
 
-    function showToast(message) {
-    // Get the toast element
-    var toastElement = document.querySelector('.toast');
-    var toastBody = toastElement.querySelector('.toast-body');
+    
+    function setMessage(message) {
+            // Create a new li element
+            var newLi = document.createElement('li');
 
-    // Set the message in the toast body
-    toastBody.textContent = message;
+            // Create a new anchor element
+            var newAnchor = document.createElement('a');
+            newAnchor.className = 'dropdown-item text-wrap';
+            newAnchor.href = '#';
+            newAnchor.textContent = message;
 
-    // Create a new bootstrap toast instance
-    var toast = new bootstrap.Toast(toastElement, {
-        autohide: false
-    });
+            // Append the anchor element to the li element
+            newLi.appendChild(newAnchor);
 
-    // Show the toast
-    toast.show();
-}
+            // Get the ul element with the id "notify"
+            var ulElement = document.getElementById('notify');
+
+            // Append the new li element to the ul element
+            ulElement.appendChild(newLi);
+
+            // Update the notification count
+            var count = document.getElementById('bellCount').getAttribute('data-count');
+            document.getElementById('bellCount').setAttribute('data-count', parseInt(count) + 1);
+
+            // Show the toast with the new message
+            showToast(message);
+        }
+
+        function showToast(message) {
+            // Create a new toast element
+            var toastElement = document.createElement('div');
+            toastElement.className = 'toast align-items-center text-bg-primary border-0';
+            toastElement.setAttribute('role', 'alert');
+            toastElement.setAttribute('aria-live', 'assertive');
+            toastElement.setAttribute('aria-atomic', 'true');
+
+            // Create the inner HTML structure of the toast
+            toastElement.innerHTML = `
+                <div class="d-flex mt-2">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            `;
+
+            // Append the toast to the container
+            document.body.appendChild(toastElement);
+
+            // Create a new bootstrap toast instance
+            var toast = new bootstrap.Toast(toastElement, {
+                autohide: false
+            });
+
+            // Show the toast
+            toast.show();
+        }
+
 
 </script>
 {% endblock %}
